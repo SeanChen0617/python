@@ -4,6 +4,8 @@ import csv
 import datetime
 
 class MFRetriever:
+    """ to retrieve recording data from MouseFlow and save to CSV """
+
     def __init__(self, email, token):
         self.email = email
         self.token = token
