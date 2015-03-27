@@ -6,9 +6,10 @@ import datetime
 class MFRetriever:
     """ to retrieve recording data from MouseFlow and save to CSV """
 
-    def __init__(self, email, token):
+    def __init__(self, email, token, other_param):
         self.email = email
         self.token = token
+        self.other_param = other_param
         print('calling getwebsites:' + str(datetime.datetime.now()))
         self.website_id = self.getwebsites(self.email, self.token)
         print('calling getpagelist:' + str(datetime.datetime.now()))
@@ -60,13 +61,12 @@ class MFRetriever:
                                         x['AvgInteractionTimeSec'], x['BounceRate'], x['ClicksPerPageView'], x['LoadTimeMS'],
                                         x['GrabTimeMS'], x['AvgScrollPercentage'], x['PageHeight'], x['HtmlSizeKB']])
 
-    def getrecordings(self, email, token, website_id):
+    def getrecordings(self, email, token, other_param, website_id):
         """ retrieve recording list """
 
         session_id = []
 
         recording_url = 'http://account.o.mouseflow.com/api/getrecordings?email=' + email + '&token=' + token + '&website='
-        other_param = '&datefrom=2015-1-1'
 
         for wsid in website_id:
             data = urllib.request.urlopen(recording_url + wsid + other_param).read().decode('utf-8')
@@ -84,11 +84,10 @@ class MFRetriever:
 
         return session_id
 
-    def getpageviews(self, email, token, session_id):
+    def getpageviews(self, email, token, other_param, session_id):
         """ retrieve pageview list """
 
         pageview_url = 'http://account.o.mouseflow.com/api/getpageviews?email=' + email + '&token=' + token + '&website='
-        other_param = '&datefrom=2015-1-1'
 
         for obj in session_id:
             data = urllib.request.urlopen(pageview_url + obj[0] + '&session=' + obj[1] + other_param).read().decode('utf-8')
